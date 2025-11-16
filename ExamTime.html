@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Exam Time Calculator</title>
+  <style>
+    body { font-family: sans-serif; padding: 1em; max-width: 500px; margin: auto; }
+    label { display: block; margin-top: 1em; }
+    input, button { width: 100%; padding: 0.5em; font-size: 1em; }
+    .result { margin-top: 1em; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h2>🕒 Exam Time Calculator</h2>
+
+  <label>Start Time:
+    <input type="time" id="startTime" value="08:52">
+  </label>
+
+<style>
+  .duration-select {
+    font-size: 1.2em;
+    padding: 0.6em;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .duration-container {
+    display: flex;
+    gap: 1em;
+    margin-top: 0.5em;
+  }
+</style>
+
+<label>Duration:</label>
+<div class="duration-container">
+  <select id="durHours" class="duration-select">
+    <option value="0">0 hr</option>
+    <option value="1">1 hr</option>
+    <option value="2" selected>2 hr</option>
+    <option value="3">3 hr</option>
+  </select>
+  <select id="durMins" class="duration-select">
+    <option value="0" selected>00 min</option>
+    <option value="15">15 min</option>
+    <option value="30">30 min</option>
+    <option value="45">45 min</option>
+  </select>
+</div>
+
+  <label>Extra Minutes (optional):
+    <input type="number" id="extraMins" value="0">
+  </label>
+
+  <button onclick="calculateTimes()">Calculate</button>
+
+  <div class="result" id="finishTime"></div>
+  <div class="result" id="finishPlus25"></div>
+
+  <script>
+    function parseTime(str) {
+      const [hours, minutes] = str.split(':').map(Number);
+      return hours * 60 + minutes;
+    }
+
+    function formatTime(totalMins) {
+      const h = Math.floor(totalMins / 60) % 24;
+      const m = totalMins % 60;
+      return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+    }
+
+    function calculateTimes() {
+      const start = parseTime(document.getElementById('startTime').value);
+      const durH = parseInt(document.getElementById('durHours').value);
+      const durM = parseInt(document.getElementById('durMins').value);
+      const duration = durH * 60 + durM;
+      const extra = parseInt(document.getElementById('extraMins').value) || 0;
+
+      const finish = start + duration + extra;
+      const finish25 = finish + Math.round(duration * 0.25);
+
+      document.getElementById('finishTime').textContent = `Finish Time: ${formatTime(finish)}`;
+      document.getElementById('finishPlus25').textContent = `Finish +25%: ${formatTime(finish25)}`;
+    }
+  </script>
+</body>
+</html>
